@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,43 +17,47 @@ namespace ImdbMoviesConsoleApp
             Stopwatch sw = new Stopwatch();
             sw.Start();
             OmdbApiManager omdbApiManager = new OmdbApiManager();
+            MovieExporter movieExporter = new MovieExporter();
+
             List<Movie> movies = new List<Movie>();
 
-            //movies = omdbApiManager.GetMovies();
-
             int imdbIdFrom = 4154756;
+            int counter = 0;
 
-            for (int i = imdbIdFrom; i >= (imdbIdFrom - 500); i--)
+            while (counter <= 10)
             {
-                string imdbIdNBumericPart = i.ToString();
+                string imdbIdNBumericPart = imdbIdFrom.ToString();
                 Movie movie = omdbApiManager.GetMovieDataByImdbId(imdbIdNBumericPart);
                 if (movie != null)
                 {
                     movies.Add(movie);
+                    counter++;
                 }
+                imdbIdFrom--;
             }
 
             sw.Stop();
-            Console.WriteLine($"Get movies - duration: {sw.ElapsedMilliseconds} ms");
+            Logger.WriteLog($"Get movies - duration: {sw.ElapsedMilliseconds} ms");
 
             sw.Restart();
-            PrintMovies(movies);
+            string moviesInfo = PrintMovies(movies);
             sw.Stop();
-            Console.WriteLine($"Print movies - duration: {sw.ElapsedMilliseconds} ms");
+            Logger.WriteLog($"Process movies info - duration: {sw.ElapsedMilliseconds} ms");
 
-            Console.ReadLine();
-        }
+            sw.Restart();
+            movieExporter.ExportMoviesToCsv(moviesInfo);
+            sw.Stop();
+            Logger.WriteLog($"Export movies to CSV - duration: {sw.ElapsedMilliseconds} ms");
+        }        
 
-        private static void PrintMovies(List<Movie> movies)
+        private static string PrintMovies(List<Movie> movies)
         {
-            StringBuilder sb = new StringBuilder();
-            
+            StringBuilder sb = new StringBuilder();            
             foreach (var movie in movies)
             {
                 sb.AppendLine(movie.ToString());
             }
-
-            Console.WriteLine(sb);
+            return sb.ToString();
         }
 
         

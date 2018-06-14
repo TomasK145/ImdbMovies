@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -16,7 +15,6 @@ namespace ImdbMoviesConsoleApp
             HttpClient client = InicializeHttpClient();
             string urlParameters = SearchByIdParameter + imdbIdNBumericPart;
 
-            // List data response.
             HttpResponseMessage response = null;
             try
             {
@@ -24,7 +22,7 @@ namespace ImdbMoviesConsoleApp
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Logger.WriteLog($"imdbIdNBumericPart: {imdbIdNBumericPart} - Exception: {ex.ToString()}");
             }
 
             if (response == null)
@@ -36,7 +34,7 @@ namespace ImdbMoviesConsoleApp
             {
                 // Parse the response body. Blocking!
                 var moveResponse = response.Content.ReadAsAsync<MovieResponse>().Result;
-                if (String.IsNullOrEmpty(moveResponse.imdbID) || moveResponse.imdbID.Equals("N/A"))
+                if (String.IsNullOrEmpty(moveResponse.imdbID) || moveResponse.imdbID.Equals("N/A") || moveResponse.Country.Equals("N/A"))
                 {
                     return null;
                 }
@@ -45,44 +43,7 @@ namespace ImdbMoviesConsoleApp
             }
             else
             {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-            }
-            return null;
-        }
-
-        public List<Movie> GetMovies()
-        {
-            HttpClient client = InicializeHttpClient();
-            List<Movie> movies = new List<Movie>();
-
-            // List data response.
-            HttpResponseMessage response = null;
-            try
-            {
-                response = client.GetAsync(SearchByQueryParameter).Result;  // Blocking call!
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            if (response == null)
-            {
-                return null;
-            }
-
-            if (response.IsSuccessStatusCode)
-            {
-                // Parse the response body. Blocking!
-                var moveResponse = response.Content.ReadAsAsync<MovieResponse>().Result;
-
-                movies.AddRange(movies);
-
-                return movies;
-            }
-            else
-            {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                Logger.WriteLog($"{(int)response.StatusCode} ({response.ReasonPhrase})");
             }
             return null;
         }
@@ -90,10 +51,8 @@ namespace ImdbMoviesConsoleApp
         private HttpClient InicializeHttpClient()
         {
             HttpClient client = new HttpClient();
-            client.Timeout = new TimeSpan(0, 0, 5);
-            
+            client.Timeout = new TimeSpan(0, 0, 5);            
             client.BaseAddress = new Uri(RequestUrl);
-            // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return client;
         }
