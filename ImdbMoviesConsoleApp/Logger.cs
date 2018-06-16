@@ -5,6 +5,7 @@ namespace ImdbMoviesConsoleApp
 {
     public sealed class Logger
     {
+        private static System.Object lockThis = new System.Object();
         private const string LogPath = @"C:\Users\Public\MoviesImdbLog.txt";
         private static readonly Lazy<Logger> lazy = new Lazy<Logger>(() => new Logger());
         public static Logger Instance { get { return lazy.Value; } }       
@@ -14,9 +15,12 @@ namespace ImdbMoviesConsoleApp
 
         public static void WriteLog(string message)
         {
-            using (StreamWriter file = new StreamWriter(LogPath, true))
+            lock (lockThis)
             {
-                file.WriteLine($"{DateTime.Now.ToString()} - {message}");
+                using (StreamWriter file = new StreamWriter(LogPath, true))
+                {
+                    file.WriteLine($"{DateTime.Now.ToString()} - {message}");
+                }
             }
         }
 

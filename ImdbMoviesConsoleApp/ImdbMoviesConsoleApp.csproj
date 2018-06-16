@@ -48,14 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMovieObtainer.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Movie.cs" />
     <Compile Include="MovieExporter.cs" />
+    <Compile Include="MovieBatchGetter.cs" />
+    <Compile Include="MovieManager.cs" />
     <Compile Include="MovieResponse.cs" />
     <Compile Include="OmdbApiManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rating.cs" />
+    <Compile Include="TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
