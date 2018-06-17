@@ -16,16 +16,23 @@ namespace ImdbMoviesConsoleApp
             OmdbApiManager omdbApiManager = new OmdbApiManager();
             int counter = 0;
 
-            while (counter <= movieCount)
+            while (counter < movieCount)
             {
                 string imdbIdNBumericPart = imdbIdFrom.ToString();
+                if (imdbIdNBumericPart.Length != 7)
+                {
+                    while (imdbIdNBumericPart.Length != 7)
+                    {
+                        imdbIdNBumericPart = "0" + imdbIdNBumericPart;
+                    }
+                }
                 Movie movie = omdbApiManager.GetMovieDataByImdbId(imdbIdNBumericPart);
                 if (movie != null)
                 {
                     movies.Add(movie);
                 }
                 counter++;
-                imdbIdFrom--;
+                imdbIdFrom++;
             }
 
             sw.Stop();

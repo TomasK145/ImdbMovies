@@ -30,7 +30,7 @@ namespace ImdbMoviesConsoleApp
             int imdbIdForTask = imdbIdForProcessing;
             for (int i = 0; i < countOfTask; i++)
             {
-                imdbIdForTask = imdbIdForTask - (i == 0 ? 0 : batchSize);
+                imdbIdForTask = imdbIdForTask + (i == 0 ? 0 : batchSize);
                 Console.WriteLine($"imdbIdForTask: {imdbIdForTask} - i: {i} - batchSize: {batchSize}");
                 movieTasks.Add(DefineTask(imdbIdForTask, batchSize));
             }

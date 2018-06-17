@@ -21,6 +21,13 @@
                 return "https://www.imdb.com/title/" + imdbID;
             }
         }
+        public string InfoMessage { get; set; }
+
+        public Movie(string imdbIdIValue, string infoMessage)
+        {
+            imdbID = "tt" + imdbIdIValue;
+            InfoMessage = infoMessage;
+        }
 
         public Movie(MovieResponse movieResponse)
         {
@@ -37,6 +44,7 @@
             BoxOffice = movieResponse.BoxOffice;
             Production = movieResponse.Production;
             Website = movieResponse.Website;
+            InfoMessage = "N/A";
         }
 
         public override string ToString()
