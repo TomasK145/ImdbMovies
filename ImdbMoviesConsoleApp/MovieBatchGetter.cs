@@ -8,7 +8,7 @@ namespace ImdbMoviesConsoleApp
     {
         public List<Movie> GetMovies(int imdbIdFrom, int movieCount)
         {
-            Console.WriteLine($"imdbIdFrom: {imdbIdFrom} - movieCount: {movieCount}");
+            Logger.WriteLog($"imdbIdFrom: {imdbIdFrom} - movieCount: {movieCount}");
             Stopwatch sw = new Stopwatch();
             sw.Start();
             List<Movie> movies = new List<Movie>();

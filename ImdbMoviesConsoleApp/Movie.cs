@@ -23,6 +23,11 @@
         }
         public string InfoMessage { get; set; }
 
+        public Movie()
+        {
+
+        }
+
         public Movie(string imdbIdIValue, string infoMessage)
         {
             imdbID = "tt" + imdbIdIValue;

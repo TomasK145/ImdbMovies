@@ -10,10 +10,16 @@ namespace ImdbMoviesConsoleApp
 {
     public static class DatabaseProcessor
     {
+        private static string ImdbDbConnectionString { get; }
+        static DatabaseProcessor()
+        {
+            ImdbDbConnectionString = ConfigurationManager.ConnectionStrings["ImdbMovieConnection"].ConnectionString;
+        }
+
+
         public static void SaveMoviesToDatabase(List<Movie> movies)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["ImdbMovieConnection"].ConnectionString; ;
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ImdbDbConnectionString))
             {
                 sqlConnection.Open();
                 string cmdString = "INSERT INTO IMDB_MOVIE (IMDB_ID,TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING,BOX_OFFICE,PRODUCTION,WEBSITE,INFO_MESSAGE,IMDB_ID_NUM) VALUES (@val1, @val2, @val3, @val4, @val5, @val6, @val7, @val8, @val9, @val10, @val11, @val12, @val13, @val14, @val15)";
@@ -46,7 +52,7 @@ namespace ImdbMoviesConsoleApp
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("Ex: " + ex);
+                            Logger.WriteLog($"ImdbId: {movie.imdbID} - Ex: {ex}");
                         }
                     }
                 }
@@ -56,8 +62,7 @@ namespace ImdbMoviesConsoleApp
         public static int GetMovieIdForNextProcessing()
         {
             int lastMovieId = 0;
-            string connectionString = ConfigurationManager.ConnectionStrings["ImdbMovieConnection"].ConnectionString; ;
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ImdbDbConnectionString))
             {  
                 string cmdString = "SELECT MAX(IMDB_ID_NUM) FROM IMDB_MOVIE";
 
@@ -73,11 +78,56 @@ namespace ImdbMoviesConsoleApp
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex);
+                        Logger.WriteLog($"Ex: {ex}");
                     }
                 }
             }
             return lastMovieId;
+        }
+
+        public static List<Movie> ReadMoviesFromDatabase()
+        {
+            List<Movie> movies = new List<Movie>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(ImdbDbConnectionString))
+            {
+                string cmdString = "SELECT TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING,BOX_OFFICE,PRODUCTION,WEBSITE FROM IMDB_MOVIE WHERE INFO_MESSAGE = 'N/A'";
+
+                using (SqlCommand sqlCommand = new SqlCommand())
+                {
+                    sqlCommand.Connection = sqlConnection;
+                    sqlCommand.CommandText = cmdString;
+
+                    sqlConnection.Open();
+                    try
+                    {
+                        SqlDataReader dataReader = sqlCommand.ExecuteReader();
+                        while (dataReader.Read())
+                        {
+                            Movie movie = new Movie();
+                            movie.Title = Convert.ToString(dataReader["TITLE"]);
+                            movie.Year = Convert.ToString(dataReader["YEAR"]);
+                            movie.Released = Convert.ToString(dataReader["RELEASED"]);
+                            movie.Runtime = Convert.ToString(dataReader["RUNTIME"]);
+                            movie.Genre = Convert.ToString(dataReader["GENRE"]);
+                            movie.Country = Convert.ToString(dataReader["COUNTRY"]);
+                            movie.Poster = Convert.ToString(dataReader["POSTER"]);
+                            movie.Metascore = Convert.ToString(dataReader["METASCORE"]);
+                            movie.imdbRating = Convert.ToString(dataReader["IMDB_RATING"]);
+                            movie.BoxOffice = Convert.ToString(dataReader["BOX_OFFICE"]);
+                            movie.Production = Convert.ToString(dataReader["PRODUCTION"]);
+                            movie.Website = Convert.ToString(dataReader["WEBSITE"]);
+                            movies.Add(movie);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteLog($"Ex: {ex}");
+                    }
+                }
+            }
+
+            return movies;
         }
     }
 }
