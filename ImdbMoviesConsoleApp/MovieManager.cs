@@ -11,9 +11,9 @@ namespace ImdbMoviesConsoleApp
             MovieObtainer = movieObtainer;
         }
 
-        public List<Movie> GetMoviesFomImdb(int countOfTasks, int imdbIdForProcessing, int batchSize)
+        public List<Movie> GetMoviesFomImdb(int imdbIdForProcessing, int batchSize)
         {
-            List<Movie> movies = MovieObtainer.GetListOfMovies(countOfTasks, imdbIdForProcessing, batchSize);
+            List<Movie> movies = MovieObtainer.GetListOfMovies(imdbIdForProcessing, batchSize);
             return movies;
         }
     }

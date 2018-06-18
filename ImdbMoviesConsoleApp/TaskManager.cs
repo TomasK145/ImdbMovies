@@ -8,17 +8,19 @@ namespace ImdbMoviesConsoleApp
     {
         private List<Task<List<Movie>>> MovieTasks { get; set; }
         private MovieBatchGetter MovieGetter { get; set; }
+        private int TaskCount { get; set; }
 
         public TaskManager()
         {
             MovieTasks = new List<Task<List<Movie>>>();
             MovieGetter = new MovieBatchGetter();
+            TaskCount = 10;
         }
 
-        public List<Movie> GetListOfMovies(int countOfTask, int imdbIdForProcessing, int batchSize)
+        public List<Movie> GetListOfMovies(int imdbIdForProcessing, int batchSize)
         {
             List<Movie> movies = new List<Movie>();
-            List<Task<List<Movie>>> movieTasks = DefineTasks(countOfTask, imdbIdForProcessing, batchSize);
+            List<Task<List<Movie>>> movieTasks = DefineTasks(TaskCount, imdbIdForProcessing, batchSize);
             WaitAllTasksInTasksList(movieTasks);
             GetResultsFromTasks(movieTasks, movies);
             return movies;

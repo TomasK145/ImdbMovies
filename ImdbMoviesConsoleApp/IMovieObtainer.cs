@@ -4,6 +4,6 @@ namespace ImdbMoviesConsoleApp
 {
     public interface IMovieObtainer
     {
-        List<Movie> GetListOfMovies(int countOfTask, int imdbIdForProcessing, int batchSize);
+        List<Movie> GetListOfMovies(int imdbIdForProcessing, int batchSize);
     }
 }

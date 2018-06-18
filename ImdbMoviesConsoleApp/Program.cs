@@ -20,7 +20,6 @@ namespace ImdbMoviesConsoleApp
             string selectedOption = Console.ReadLine();
 
             //TODO: prerobit na citanie parametrov z app config
-            //TODO: pocet taskov ziskavat v TASK triede, inde nepodstatne
             //TODO: zvacsit timeout pre pracu s API --> ziskat z DB vsetky ID, ktore skoncili v chybe a opatovne spracovat s vacsim timeoutom
             //TODO: logika pre ziskanie zaznamov z DB s errorom
             //TODO: vytvorenie riesenia, ktore bude brat do uvahy 
@@ -51,15 +50,14 @@ namespace ImdbMoviesConsoleApp
             List<Movie> movies = new List<Movie>();
 
             MovieManager movieManager = new MovieManager(new TaskManager());
-            int defaultImdbId = 1;  // 4154756; //tt0098000 - Nocturne indien (1989) - pociatok ziskavania filmov
+            int defaultImdbId = 98000;  // 4154756; //tt0098000 - Nocturne indien (1989) - pociatok ziskavania filmov
 
             int imdbIdLastProcessed = DatabaseProcessor.GetMovieIdForNextProcessing();
             int imdbIdForProcessing = imdbIdLastProcessed == 0 ? defaultImdbId : (imdbIdLastProcessed + 1);
             int batchSize = 5000;
-            int countOfTasks = 10;
 
             Console.WriteLine($"Data budu ziskavane pre IMDB filmy od ID = {imdbIdForProcessing}");
-            movies = movieManager.GetMoviesFomImdb(countOfTasks, imdbIdForProcessing, batchSize);
+            movies = movieManager.GetMoviesFomImdb(imdbIdForProcessing, batchSize);
             
             sw.Restart();
             DatabaseProcessor.SaveMoviesToDatabase(movies);
