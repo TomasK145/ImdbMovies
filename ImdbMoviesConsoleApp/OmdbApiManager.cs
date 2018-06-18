@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace ImdbMoviesConsoleApp
 {
-    public class OmdbApiManager
+    public sealed class OmdbApiManager
     {
         const string RequestUrl = "http://www.omdbapi.com/";
         const string SearchByIdParameter = "?apikey=3bc42aaa&type=movie&i=tt";
-        const string SearchByQueryParameter = "?apikey=3bc42aaa&s=Lord&type=movie&y=1990&page=1";
+        private HttpClient Client { get; set; }
+        //const string SearchByQueryParameter = "?apikey=3bc42aaa&s=Lord&type=movie&y=1990&page=1";
+
+        public OmdbApiManager()
+        {
+            Client = InicializeHttpClient();
+        }
 
         public Movie GetMovieDataByImdbId(string imdbIdNBumericPart)
         {
-            HttpClient client = InicializeHttpClient();
+            HttpClient client = Client;
             string urlParameters = SearchByIdParameter + imdbIdNBumericPart;
 
             HttpResponseMessage response = null;
@@ -40,7 +47,7 @@ namespace ImdbMoviesConsoleApp
                 {
                     return null;
                 }
-                var movie = new Movie(moveResponse);
+                var movie = new Movie(moveResponse);                
                 return movie;
             }
             else
@@ -53,9 +60,10 @@ namespace ImdbMoviesConsoleApp
         private HttpClient InicializeHttpClient()
         {
             HttpClient client = new HttpClient();
-            client.Timeout = new TimeSpan(0, 0, 5);            
+            client.Timeout = new TimeSpan(0, 0, 30);            
             client.BaseAddress = new Uri(RequestUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.ConnectionClose = false;
             return client;
         }
     }
