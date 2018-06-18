@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigReader.cs" />
     <Compile Include="DatabaseProcessor.cs" />
     <Compile Include="IMovieObtainer.cs" />
     <Compile Include="Logger.cs" />

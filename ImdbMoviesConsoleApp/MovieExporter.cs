@@ -6,13 +6,20 @@ namespace ImdbMoviesConsoleApp
 {
     public class MovieExporter
     {
-        private const string CsvHeader = "Title;Year;Released;Runtime;Genre;Country;Poster;Metascore;imdbRating;BoxOffice;Production;Website;ImdbUrl";
+        private string CsvHeader { get; set; }
         private string CsvFileLocation
         {
             get
             {
-                return @"C:\Users\Public\MoviesImdb_" + Guid.NewGuid().ToString() + ".csv";
+                return CsvExportPath + "MoviesImdb_" + Guid.NewGuid().ToString() + ".csv";
             }
+        }
+        private string CsvExportPath { get; set; }
+
+        public MovieExporter()
+        {
+            CsvHeader = ConfigReader.GetConfigValue("csvHeader");
+            CsvExportPath = ConfigReader.GetConfigValue("csvExportPath");
         }
 
         public void ExportMoviesToCsv(string resultText)

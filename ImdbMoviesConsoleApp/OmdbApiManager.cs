@@ -8,19 +8,21 @@ namespace ImdbMoviesConsoleApp
     public sealed class OmdbApiManager
     {
         const string RequestUrl = "http://www.omdbapi.com/";
-        const string SearchByIdParameter = "?apikey=3bc42aaa&type=movie&i=tt";
+        private string SearchByIdParameter { get; set; }
         private HttpClient Client { get; set; }
-        //const string SearchByQueryParameter = "?apikey=3bc42aaa&s=Lord&type=movie&y=1990&page=1";
 
         public OmdbApiManager()
         {
             Client = InicializeHttpClient();
+            string apiKey = ConfigReader.GetConfigValue("apiKey");
+            SearchByIdParameter = $"?apikey={apiKey}&type=movie&i=tt";
         }
 
         public Movie GetMovieDataByImdbId(string imdbIdNBumericPart)
         {
             HttpClient client = Client;
             string urlParameters = SearchByIdParameter + imdbIdNBumericPart;
+            
 
             HttpResponseMessage response = null;
             try

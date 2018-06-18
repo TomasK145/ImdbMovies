@@ -6,7 +6,7 @@ namespace ImdbMoviesConsoleApp
     public sealed class Logger
     {
         private static System.Object lockThis = new System.Object();
-        private const string LogPath = @"C:\Users\Public\MoviesImdbLog.txt";
+        private static string LogPath = ConfigReader.GetConfigValue("logPath") + "MoviesImdbLog.txt";
         private static readonly Lazy<Logger> lazy = new Lazy<Logger>(() => new Logger());
         public static Logger Instance { get { return lazy.Value; } }       
         private Logger()

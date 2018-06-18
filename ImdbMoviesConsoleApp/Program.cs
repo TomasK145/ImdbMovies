@@ -19,7 +19,6 @@ namespace ImdbMoviesConsoleApp
             Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru");
             string selectedOption = Console.ReadLine();
 
-            //TODO: prerobit na citanie parametrov z app config
             //TODO: zvacsit timeout pre pracu s API --> ziskat z DB vsetky ID, ktore skoncili v chybe a opatovne spracovat s vacsim timeoutom
             //TODO: logika pre ziskanie zaznamov z DB s errorom
             //TODO: vytvorenie riesenia, ktore bude brat do uvahy 
@@ -50,11 +49,11 @@ namespace ImdbMoviesConsoleApp
             List<Movie> movies = new List<Movie>();
 
             MovieManager movieManager = new MovieManager(new TaskManager());
-            int defaultImdbId = 98000;  // 4154756; //tt0098000 - Nocturne indien (1989) - pociatok ziskavania filmov
+            int defaultImdbId = Int32.Parse(ConfigReader.GetConfigValue("defaultImdbId")); //tt0098000 - Nocturne indien (1989) - pociatok ziskavania filmov?
 
             int imdbIdLastProcessed = DatabaseProcessor.GetMovieIdForNextProcessing();
             int imdbIdForProcessing = imdbIdLastProcessed == 0 ? defaultImdbId : (imdbIdLastProcessed + 1);
-            int batchSize = 5000;
+            int batchSize = Int32.Parse(ConfigReader.GetConfigValue("batchSize"));
 
             Console.WriteLine($"Data budu ziskavane pre IMDB filmy od ID = {imdbIdForProcessing}");
             movies = movieManager.GetMoviesFomImdb(imdbIdForProcessing, batchSize);

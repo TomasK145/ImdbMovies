@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace ImdbMoviesConsoleApp
 {
     public class MovieBatchGetter
     {
+        private const int ImdbIdLength = 7;
         public List<Movie> GetMovies(int imdbIdFrom, int movieCount)
         {
             Logger.WriteLog($"MovieBatchGetter - imdbIdFrom: {imdbIdFrom} - movieCount: {movieCount}");
@@ -19,13 +19,11 @@ namespace ImdbMoviesConsoleApp
             while (counter < movieCount)
             {
                 string imdbIdNBumericPart = imdbIdFrom.ToString();
-                if (imdbIdNBumericPart.Length != 7)
+                while (imdbIdNBumericPart.Length != ImdbIdLength)
                 {
-                    while (imdbIdNBumericPart.Length != 7)
-                    {
-                        imdbIdNBumericPart = "0" + imdbIdNBumericPart;
-                    }
+                    imdbIdNBumericPart = "0" + imdbIdNBumericPart;
                 }
+                
                 Movie movie = omdbApiManager.GetMovieDataByImdbId(imdbIdNBumericPart);
                 if (movie != null)
                 {

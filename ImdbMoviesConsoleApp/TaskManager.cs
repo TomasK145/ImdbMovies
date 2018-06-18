@@ -14,7 +14,7 @@ namespace ImdbMoviesConsoleApp
         {
             MovieTasks = new List<Task<List<Movie>>>();
             MovieGetter = new MovieBatchGetter();
-            TaskCount = 10;
+            TaskCount = Int32.Parse(ConfigReader.GetConfigValue("taskCount"));
         }
 
         public List<Movie> GetListOfMovies(int imdbIdForProcessing, int batchSize)
