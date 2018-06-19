@@ -23,6 +23,7 @@ namespace ImdbMoviesConsoleApp
             //TODO: logika pre ziskanie zaznamov z DB s errorom
             //TODO: vytvorenie riesenia, ktore bude brat do uvahy 
             //TODO: prirobit requestovanie podla konkretneho ID 
+            //TODO: vyriesit separator medzi stlpcami --> definuj v app.config --> uprav pre vytvaranie CSV
 
             if (selectedOption.Equals("1"))
             {
