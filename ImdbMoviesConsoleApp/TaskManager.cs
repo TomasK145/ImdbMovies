@@ -33,7 +33,7 @@ namespace ImdbMoviesConsoleApp
             for (int i = 0; i < countOfTask; i++)
             {
                 imdbIdForTask = imdbIdForTask + (i == 0 ? 0 : batchSize);
-                Logger.WriteLog($"TaskManager - imdbIdForTask: {imdbIdForTask} - batchSize: {batchSize}");
+                Logger.Instance.WriteLog($"TaskManager - imdbIdForTask: {imdbIdForTask} - batchSize: {batchSize}");
                 movieTasks.Add(DefineTask(imdbIdForTask, batchSize));
             }
             return movieTasks;
@@ -60,7 +60,7 @@ namespace ImdbMoviesConsoleApp
             {
                 counter++;
                 List<Movie> taskMovies = task.Result;
-                Logger.WriteLog($"Task{counter} result count: {taskMovies.Count}");
+                Logger.Instance.WriteLog($"Task{counter} result count: {taskMovies.Count}");
                 movies.AddRange(taskMovies);
             }
         }

@@ -52,7 +52,7 @@ namespace ImdbMoviesConsoleApp
                         }
                         catch (Exception ex)
                         {
-                            Logger.WriteLog($"ImdbId: {movie.imdbID} - Ex: {ex}");
+                            Logger.Instance.WriteLog($"ImdbId: {movie.imdbID} - Ex: {ex}");
                         }
                     }
                 }
@@ -78,7 +78,7 @@ namespace ImdbMoviesConsoleApp
                     }
                     catch (Exception ex)
                     {
-                        Logger.WriteLog($"Ex: {ex}");
+                        Logger.Instance.WriteLog($"Ex: {ex}");
                     }
                 }
             }
@@ -122,7 +122,7 @@ namespace ImdbMoviesConsoleApp
                     }
                     catch (Exception ex)
                     {
-                        Logger.WriteLog($"Ex: {ex}");
+                        Logger.Instance.WriteLog($"Ex: {ex}");
                     }
                 }
             }

@@ -8,7 +8,7 @@ namespace ImdbMoviesConsoleApp
         private const int ImdbIdLength = 7;
         public List<Movie> GetMovies(int imdbIdFrom, int movieCount)
         {
-            Logger.WriteLog($"MovieBatchGetter - imdbIdFrom: {imdbIdFrom} - movieCount: {movieCount}");
+            Logger.Instance.WriteLog($"MovieBatchGetter - imdbIdFrom: {imdbIdFrom} - movieCount: {movieCount}");
             Stopwatch sw = new Stopwatch();
             sw.Start();
             List<Movie> movies = new List<Movie>();
@@ -34,7 +34,7 @@ namespace ImdbMoviesConsoleApp
             }
 
             sw.Stop();
-            Logger.WriteLog($"Get movies - duration: {sw.ElapsedMilliseconds} ms");
+            Logger.Instance.WriteLog($"Get movies - duration: {sw.ElapsedMilliseconds} ms");
 
             return movies;
         }

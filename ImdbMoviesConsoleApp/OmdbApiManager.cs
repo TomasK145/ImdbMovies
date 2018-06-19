@@ -31,7 +31,7 @@ namespace ImdbMoviesConsoleApp
             }
             catch (Exception ex)
             {
-                Logger.WriteLog($"imdbIdNBumericPart: {imdbIdNBumericPart} - Exception: {ex.ToString()}");
+                Logger.Instance.WriteLog($"imdbIdNBumericPart: {imdbIdNBumericPart} - Exception: {ex.ToString()}");
                 var movie = new Movie(imdbIdNBumericPart, ex.ToString());
                 return movie;
             }
@@ -54,7 +54,7 @@ namespace ImdbMoviesConsoleApp
             }
             else
             {
-                Logger.WriteLog($"{(int)response.StatusCode} ({response.ReasonPhrase})");             
+                Logger.Instance.WriteLog($"{(int)response.StatusCode} ({response.ReasonPhrase})");             
             }
             return null;
         }

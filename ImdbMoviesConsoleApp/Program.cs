@@ -61,7 +61,7 @@ namespace ImdbMoviesConsoleApp
             sw.Restart();
             DatabaseProcessor.SaveMoviesToDatabase(movies);
             sw.Stop();
-            Logger.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");
+            Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");
         }
 
         private static void ExportMoviesFromDatabaseToCsv()
@@ -73,18 +73,18 @@ namespace ImdbMoviesConsoleApp
 
             movies = DatabaseProcessor.ReadMoviesFromDatabase();
             sw.Stop();
-            Logger.WriteLog($"Read movies from DB - duration: {sw.ElapsedMilliseconds} ms");
+            Logger.Instance.WriteLog($"Read movies from DB - duration: {sw.ElapsedMilliseconds} ms");
 
 
             sw.Restart();
             string moviesInfo = PrintMovies(movies);
             sw.Stop();
-            Logger.WriteLog($"Process movies info - duration: {sw.ElapsedMilliseconds} ms");
+            Logger.Instance.WriteLog($"Process movies info - duration: {sw.ElapsedMilliseconds} ms");
 
             sw.Restart();
             movieExporter.ExportMoviesToCsv(moviesInfo);
             sw.Stop();
-            Logger.WriteLog($"Export movies to CSV - duration: {sw.ElapsedMilliseconds} ms");
+            Logger.Instance.WriteLog($"Export movies to CSV - duration: {sw.ElapsedMilliseconds} ms");
         }
 
         private static string PrintMovies(List<Movie> movies)
