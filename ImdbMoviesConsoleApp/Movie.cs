@@ -54,7 +54,8 @@
 
         public override string ToString()
         {
-            return $"{Title};{Year};{Released};{Runtime};{Genre};{Country};{Poster};{Metascore};{imdbRating};{BoxOffice};{Production};{Website};{ImdbUrl}";
+            var separator = ConfigReader.GetConfigValue("csvSeparator");
+            return $"{Title}{separator}{Year}{separator}{Released}{separator}{Runtime}{separator}{Genre}{separator}{Country}{separator}{Poster}{separator}{Metascore}{separator}{imdbRating}{separator}{BoxOffice}{separator}{Production}{separator}{Website}{separator}{ImdbUrl}";
         }
     }
 }
