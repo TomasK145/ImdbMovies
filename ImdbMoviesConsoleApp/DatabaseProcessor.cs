@@ -52,7 +52,7 @@ namespace ImdbMoviesConsoleApp
                         }
                         catch (Exception ex)
                         {
-                            Logger.Instance.WriteLog($"ImdbId: {movie.imdbID} - Ex: {ex}");
+                            Logger.Instance.WriteLog($"ImdbId: {movie.imdbID} - movieString: {movie.ToString()} - Ex: {ex}");
                         }
                     }
                 }
