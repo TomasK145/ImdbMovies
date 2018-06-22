@@ -91,7 +91,7 @@ namespace ImdbMoviesConsoleApp
 
             using (SqlConnection sqlConnection = new SqlConnection(ImdbDbConnectionString))
             {
-                string cmdString = "SELECT TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING,BOX_OFFICE,PRODUCTION,WEBSITE FROM IMDB_MOVIE WHERE INFO_MESSAGE = 'N/A'";
+                string cmdString = "SELECT IMDB_ID,TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING,BOX_OFFICE,PRODUCTION,WEBSITE FROM IMDB_MOVIE WHERE INFO_MESSAGE = 'N/A'";
 
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -105,6 +105,7 @@ namespace ImdbMoviesConsoleApp
                         while (dataReader.Read())
                         {
                             Movie movie = new Movie();
+                            movie.imdbID = Convert.ToString(dataReader["IMDB_ID"]);
                             movie.Title = Convert.ToString(dataReader["TITLE"]);
                             movie.Year = Convert.ToString(dataReader["YEAR"]);
                             movie.Released = Convert.ToString(dataReader["RELEASED"]);
