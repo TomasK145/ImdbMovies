@@ -130,5 +130,14 @@ namespace ImdbMoviesConsoleApp
 
             return movies;
         }
+
+        public static List<int> GetFailedMovieIds()
+        {
+            List<int> movieIdList = new List<int>();
+
+            //TODO: logika pre ziskanie ID filmov u ktorych zlyhalo ziskanie dat z IMDB pre opatovny pokus
+
+            return movieIdList;
+        }
     }
 }

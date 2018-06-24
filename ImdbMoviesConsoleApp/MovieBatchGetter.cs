@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace ImdbMoviesConsoleApp
@@ -23,8 +24,18 @@ namespace ImdbMoviesConsoleApp
                 {
                     imdbIdNBumericPart = "0" + imdbIdNBumericPart;
                 }
+
+                Movie movie = null;
+                try
+                {
+                    movie = omdbApiManager.GetMovieDataByImdbId(imdbIdNBumericPart);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.WriteLog($"imdbIdNBumericPart: {imdbIdNBumericPart} - Exception: {ex.ToString()}");
+                    movie = new Movie(imdbIdNBumericPart, ex.ToString());
+                }
                 
-                Movie movie = omdbApiManager.GetMovieDataByImdbId(imdbIdNBumericPart);
                 if (movie != null)
                 {
                     movies.Add(movie);
