@@ -16,15 +16,15 @@ namespace ImdbMoviesConsoleApp
     {
         static void Main(string[] args)
         {
+            Stopwatch stopwatch = new Stopwatch();
             Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru");
             string selectedOption = Console.ReadLine();
 
             //TODO: zvacsit timeout pre pracu s API --> ziskat z DB vsetky ID, ktore skoncili v chybe a opatovne spracovat s vacsim timeoutom
             //TODO: logika pre ziskanie zaznamov z DB s errorom
-            //TODO: vytvorenie riesenia, ktore bude brat do uvahy 
             //TODO: prirobit requestovanie podla konkretneho ID 
-            //TODO: vyriesit separator medzi stlpcami --> definuj v app.config --> uprav pre vytvaranie CSV
 
+            stopwatch.Start();
             if (selectedOption.Equals("1"))
             {
                 Console.WriteLine("Prebieha ziskavanie filmov z IMDB a ukladanie do databazy...");
@@ -39,7 +39,9 @@ namespace ImdbMoviesConsoleApp
             {
                 Console.WriteLine("Nespravna volba! Program bude ukonceny.");
                 Console.ReadLine();
-            }          
+            }
+            stopwatch.Stop();
+            Logger.Instance.WriteLog($"Total duration: {stopwatch.ElapsedMilliseconds} ms");
         }
 
         private static void GetMoviesFromImdbToDatabase()
