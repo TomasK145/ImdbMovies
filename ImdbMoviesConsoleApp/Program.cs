@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
+using Autofac;
 
 namespace ImdbMoviesConsoleApp
 {
     class Program
     {
         private static IMovieRepository dbProcessor;
+        private static IContainer Container { get; set; }
 
         static void Main(string[] args)
         {
             Stopwatch stopwatch = new Stopwatch();
             Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru");
             string selectedOption = Console.ReadLine();
-            dbProcessor = new DapperMovieRepository(); // new DatabaseProcessor();
+            Container = DependencyConfiguration.InitializeContainer();
+            dbProcessor = Container.Resolve<IMovieRepository>();
+
+
 
             //TODO: zvacsit timeout pre pracu s API --> ziskat z DB vsetky ID, ktore skoncili v chybe a opatovne spracovat s vacsim timeoutom
             //TODO: logika pre ziskanie zaznamov z DB s errorom
