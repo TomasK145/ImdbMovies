@@ -7,7 +7,7 @@ namespace ImdbMoviesConsoleApp
 {
     public sealed class OmdbApiManager
     {
-        const string RequestUrl = "http://www.omdbapi.com/";
+        const string RequestUrl = "http://www.omdbapi.com/"; //"http://private.omdbapi.com/";//
         private string SearchByIdParameter { get; set; }
         private HttpClient Client { get; set; }
 
