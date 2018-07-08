@@ -14,11 +14,14 @@ namespace ImdbMoviesConsoleApp
 {
     class Program
     {
+        private static IMovieRepository dbProcessor;
+
         static void Main(string[] args)
         {
             Stopwatch stopwatch = new Stopwatch();
             Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru");
             string selectedOption = Console.ReadLine();
+            dbProcessor = new DapperMovieRepository(); // new DatabaseProcessor();
 
             //TODO: zvacsit timeout pre pracu s API --> ziskat z DB vsetky ID, ktore skoncili v chybe a opatovne spracovat s vacsim timeoutom
             //TODO: logika pre ziskanie zaznamov z DB s errorom
@@ -54,7 +57,7 @@ namespace ImdbMoviesConsoleApp
             MovieManager movieManager = new MovieManager(new TaskManager());
             int defaultImdbId = Int32.Parse(ConfigReader.GetConfigValue("defaultImdbId")); //tt0098000 - Nocturne indien (1989) - pociatok ziskavania filmov?
 
-            int imdbIdLastProcessed = DatabaseProcessor.GetMovieIdForNextProcessing();
+            int imdbIdLastProcessed = dbProcessor.GetMovieIdForNextProcessing();
             int imdbIdForProcessing = imdbIdLastProcessed == 0 ? defaultImdbId : (imdbIdLastProcessed + 1);
             int batchSize = Int32.Parse(ConfigReader.GetConfigValue("batchSize"));
 
@@ -62,7 +65,7 @@ namespace ImdbMoviesConsoleApp
             movies = movieManager.GetMoviesFomImdb(imdbIdForProcessing, batchSize);
             
             sw.Restart();
-            DatabaseProcessor.SaveMoviesToDatabase(movies);
+            dbProcessor.SaveMoviesToDatabase(movies);
             sw.Stop();
             Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");
         }
@@ -74,7 +77,7 @@ namespace ImdbMoviesConsoleApp
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            movies = DatabaseProcessor.ReadMoviesFromDatabase();
+            movies = dbProcessor.ReadMoviesFromDatabase();
             sw.Stop();
             Logger.Instance.WriteLog($"Read movies from DB - duration: {sw.ElapsedMilliseconds} ms");
 
