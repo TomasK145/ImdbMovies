@@ -7,7 +7,7 @@ namespace ImdbMoviesConsoleApp
         public static IContainer InitializeContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<DapperMovieRepository>().As<IMovieRepository>();
+            builder.RegisterType<MovieRepository>().As<IMovieRepository>();
             return builder.Build();
         }
     }
