@@ -79,7 +79,7 @@ namespace ImdbMoviesConsoleApp
             sw.Stop();
             Logger.Instance.WriteLog($"Read movies from DB - duration: {sw.ElapsedMilliseconds} ms");
 
-
+            //TODO: optimalizovat zapisovanie do CSV
             sw.Restart();
             string moviesInfo = PrintMovies(movies);
             sw.Stop();
