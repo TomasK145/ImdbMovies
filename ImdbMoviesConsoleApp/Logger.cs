@@ -3,7 +3,7 @@ using System.IO;
 
 namespace ImdbMoviesConsoleApp
 {
-    public sealed class Logger
+    public class Logger
     {
         private static string LogFullPath { get; set; }
         private static Logger _instance = null;
@@ -24,7 +24,7 @@ namespace ImdbMoviesConsoleApp
             LogFullPath = ConfigReader.GetConfigValue("logPath") + "MoviesImdbLog_" + Guid.NewGuid().ToString() + ".txt";
         }
 
-        private static System.Object lockThis = new System.Object();       
+        private static System.Object lockThis = new System.Object();
 
         public void WriteLog(string message)
         {

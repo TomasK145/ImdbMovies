@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace ImdbMoviesConsoleApp
 {
-    public static class DatabaseProcessor
+    public class MovieRepository : IMovieRepository
     {
-        private static string ImdbDbConnectionString { get; }
-        static DatabaseProcessor()
+        private string ImdbDbConnectionString { get; }
+        public MovieRepository()
         {
             ImdbDbConnectionString = ConfigurationManager.ConnectionStrings["ImdbMovieConnection"].ConnectionString;
         }
-
-
-        public static void SaveMoviesToDatabase(List<Movie> movies)
+        
+        public void SaveMoviesToDatabase(List<Movie> movies)
         {
             using (SqlConnection sqlConnection = new SqlConnection(ImdbDbConnectionString))
             {
@@ -59,7 +58,7 @@ namespace ImdbMoviesConsoleApp
             }
         }
 
-        public static int GetMovieIdForNextProcessing()
+        public int GetMovieIdForNextProcessing()
         {
             int lastMovieId = 0;
             using (SqlConnection sqlConnection = new SqlConnection(ImdbDbConnectionString))
@@ -85,7 +84,7 @@ namespace ImdbMoviesConsoleApp
             return lastMovieId;
         }
 
-        public static List<Movie> ReadMoviesFromDatabase()
+        public List<Movie> ReadMoviesFromDatabase()
         {
             List<Movie> movies = new List<Movie>();
 
@@ -131,7 +130,7 @@ namespace ImdbMoviesConsoleApp
             return movies;
         }
 
-        public static List<int> GetFailedMovieIds()
+        public List<int> GetFailedMovieIds()
         {
             List<int> movieIdList = new List<int>();
 
