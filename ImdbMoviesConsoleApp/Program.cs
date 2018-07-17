@@ -78,7 +78,7 @@ namespace ImdbMoviesConsoleApp
             movies = dbProcessor.ReadMoviesFromDatabase();
             sw.Stop();
             Logger.Instance.WriteLog($"Read movies from DB - duration: {sw.ElapsedMilliseconds} ms");
-
+            //TODO : https://stackoverflow.com/questions/15414347/how-to-loop-through-ienumerable-in-batches
             //TODO: optimalizovat zapisovanie do CSV
             sw.Restart();
             string moviesInfo = PrintMovies(movies);
