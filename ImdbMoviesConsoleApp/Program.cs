@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Autofac;
 
@@ -76,19 +77,33 @@ namespace ImdbMoviesConsoleApp
             sw.Start();
 
             movies = dbProcessor.ReadMoviesFromDatabase();
+            int movieCount = movies.Count;
+            int batchSize = 500000;
+            int currentBatch = 0;
+            int totalBatchCount = (int)Math.Ceiling((double)movieCount / (double)batchSize);
+
             sw.Stop();
             Logger.Instance.WriteLog($"Read movies from DB - duration: {sw.ElapsedMilliseconds} ms");
             //TODO : https://stackoverflow.com/questions/15414347/how-to-loop-through-ienumerable-in-batches
             //TODO: optimalizovat zapisovanie do CSV
-            sw.Restart();
-            string moviesInfo = PrintMovies(movies);
-            sw.Stop();
-            Logger.Instance.WriteLog($"Process movies info - duration: {sw.ElapsedMilliseconds} ms");
 
-            sw.Restart();
-            movieExporter.ExportMoviesToCsv(moviesInfo);
-            sw.Stop();
-            Logger.Instance.WriteLog($"Export movies to CSV - duration: {sw.ElapsedMilliseconds} ms");
+            while (currentBatch < totalBatchCount)
+            {
+                List<Movie> moviesForProcessing = movies.Skip(currentBatch * batchSize).Take(batchSize).ToList();
+
+                sw.Restart();
+                string moviesInfo = PrintMovies(moviesForProcessing);
+                sw.Stop();
+                Logger.Instance.WriteLog($"Process movies info - duration: {sw.ElapsedMilliseconds} ms");
+
+                sw.Restart();
+                movieExporter.ExportMoviesToCsv(moviesInfo, currentBatch);
+                sw.Stop();
+                Logger.Instance.WriteLog($"Export movies to CSV - duration: {sw.ElapsedMilliseconds} ms");
+
+                currentBatch++;
+            }
+            
         }
 
         private static string PrintMovies(List<Movie> movies)

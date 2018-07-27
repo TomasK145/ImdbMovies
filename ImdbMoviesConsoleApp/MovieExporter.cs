@@ -22,12 +22,13 @@ namespace ImdbMoviesConsoleApp
             CsvExportPath = ConfigReader.GetConfigValue("csvExportPath");
         }
 
-        public void ExportMoviesToCsv(string resultText)
+        public void ExportMoviesToCsv(string resultText, int currentBatch)
         {
+            string csvFileLocation = CsvExportPath + "MoviesImdb_" + currentBatch.ToString() + ".csv";
             StringBuilder sb = new StringBuilder();        
             sb.AppendLine(CsvHeader);
             sb.AppendLine(resultText);
-            using (StreamWriter file = new StreamWriter(CsvFileLocation, true))
+            using (StreamWriter file = new StreamWriter(csvFileLocation, true))
             {
                 file.WriteLine(sb.ToString());
             }

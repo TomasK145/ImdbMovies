@@ -21,7 +21,7 @@ namespace ImdbMoviesConsoleApp
 
             using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
             {
-                string selectQuery = "SELECT IMDB_ID as imdbId,TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING as imdbRating,BOX_OFFICE as BoxOffice,PRODUCTION,WEBSITE FROM IMDB_MOVIE WHERE INFO_MESSAGE = 'N/A'";
+                string selectQuery = "SELECT IMDB_ID as imdbId,TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING as imdbRating,BOX_OFFICE as BoxOffice,PRODUCTION,WEBSITE FROM IMDB_MOVIE WHERE INFO_MESSAGE = 'N/A' ORDER BY IMDB_ID_NUM ASC";
 
                 movies = connection.Query<Movie>(selectQuery).AsList();
             }
