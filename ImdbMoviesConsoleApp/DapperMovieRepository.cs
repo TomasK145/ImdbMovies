@@ -75,11 +75,22 @@ namespace ImdbMoviesConsoleApp
             return lastMovieId;
         }
 
-        public List<int> GetFailedMovieIds()
+        public List<int> GetFailedMovieIds(int selectTopCount)
         {
             List<int> movieIdList = new List<int>();
-
-            //TODO: logika pre ziskanie ID filmov u ktorych zlyhalo ziskanie dat z IMDB pre opatovny pokus
+            string selectFailedMoviesQuery = $"select top {selectTopCount} IMDB_ID_NUM from IMDB_MOVIE where INFO_MESSAGE <> '' and IMDB_ID_NUM > 0 order by IMDB_ID_NUM desc";
+            using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
+            {
+                try
+                {
+                    movieIdList = connection.Query<int>(selectFailedMoviesQuery).AsList();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.WriteLog($"Select failed movies' ids - Ex: {ex}");
+                }
+                
+            }
 
             return movieIdList;
         }

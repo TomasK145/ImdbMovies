@@ -130,7 +130,7 @@ namespace ImdbMoviesConsoleApp
             return movies;
         }
 
-        public List<int> GetFailedMovieIds()
+        public List<int> GetFailedMovieIds(int selectTopCount)
         {
             List<int> movieIdList = new List<int>();
 

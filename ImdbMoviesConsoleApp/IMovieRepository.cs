@@ -7,6 +7,6 @@ namespace ImdbMoviesConsoleApp
         void SaveMoviesToDatabase(List<Movie> movies);
         int GetMovieIdForNextProcessing();
         List<Movie> ReadMoviesFromDatabase();
-        List<int> GetFailedMovieIds();
+        List<int> GetFailedMovieIds(int selectTopCount);
     }
 }
