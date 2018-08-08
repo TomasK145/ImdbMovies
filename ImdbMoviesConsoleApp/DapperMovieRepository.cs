@@ -30,7 +30,8 @@ namespace ImdbMoviesConsoleApp
 
         public void SaveMoviesToDatabase(List<Movie> movies)
         {
-            string insertQuery = "INSERT INTO IMDB_MOVIE (IMDB_ID,TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING,BOX_OFFICE,PRODUCTION,WEBSITE,INFO_MESSAGE,IMDB_ID_NUM) VALUES (@val1, @val2, @val3, @val4, @val5, @val6, @val7, @val8, @val9, @val10, @val11, @val12, @val13, @val14, @val15)";
+            string insertQuery = "INSERT INTO IMDB_MOVIE (IMDB_ID,TITLE,YEAR,RELEASED,RUNTIME,GENRE,COUNTRY,POSTER,METASCORE,IMDB_RATING,BOX_OFFICE,PRODUCTION,WEBSITE,INFO_MESSAGE,IMDB_ID_NUM) "
+                + "VALUES (@IMDB_ID, @TITLE, @YEAR, @RELEASED, @RUNTIME, @GENRE, @COUNTRY, @POSTER, @METASCORE, @IMDB_RATING, @BOX_OFFICE, @PRODUCTION, @WEBSITE, @INFO_MESSAGE, @IMDB_ID_NUM)";
 
             using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
             {
