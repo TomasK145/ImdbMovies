@@ -138,5 +138,10 @@ namespace ImdbMoviesConsoleApp
 
             return movieIdList;
         }
+
+        public void DeleteMoviesFromDatabase(List<int> moviesIdsForDeletion)
+        {
+            
+        }
     }
 }

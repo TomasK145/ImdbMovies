@@ -49,5 +49,45 @@ namespace ImdbMoviesConsoleApp
 
             return movies;
         }
+
+        public List<Movie> GetMovies(List<int> failedIdsLists)
+        {
+            Logger.Instance.WriteLog($"MovieBatchGetter - GetMoviesForIdList start");
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            List<Movie> movies = new List<Movie>();
+
+            OmdbApiManager omdbApiManager = new OmdbApiManager();
+
+            foreach (var movieId in failedIdsLists)
+            {
+                string imdbIdNBumericPart = movieId.ToString();
+                while (imdbIdNBumericPart.Length != ImdbIdLength)
+                {
+                    imdbIdNBumericPart = "0" + imdbIdNBumericPart;
+                }
+
+                Movie movie = null;
+                try
+                {
+                    movie = omdbApiManager.GetMovieDataByImdbId(imdbIdNBumericPart);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.WriteLog($"imdbIdNBumericPart: {imdbIdNBumericPart} - Exception: {ex.ToString()}");
+                    movie = new Movie(imdbIdNBumericPart, ex.ToString());
+                }
+
+                if (movie != null)
+                {
+                    movies.Add(movie);
+                }
+            }
+
+            sw.Stop();
+            Logger.Instance.WriteLog($"MovieBatchGetter - GetMoviesForIdList end - duration: {sw.ElapsedMilliseconds} ms");
+
+            return movies;
+        }
     }
 }

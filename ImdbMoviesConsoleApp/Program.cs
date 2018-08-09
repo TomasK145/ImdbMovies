@@ -45,7 +45,7 @@ namespace ImdbMoviesConsoleApp
                 int selectCount = taskCount * batchSize;
 
                 List<int> failedMoviesIds = dbProcessor.GetFailedMovieIds(selectCount);
-                //TODO: spracuj
+                GetFailedMoviesFromImdbToDatabase(failedMoviesIds);
             }
             else
             {
@@ -74,6 +74,21 @@ namespace ImdbMoviesConsoleApp
             movies = movieManager.GetMoviesFomImdb(imdbIdForProcessing, batchSize);
             
             sw.Restart();
+            dbProcessor.SaveMoviesToDatabase(movies);
+            sw.Stop();
+            Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");
+        }
+
+        private static void GetFailedMoviesFromImdbToDatabase(List<int> failedMoviesIds)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            MovieManager movieManager = new MovieManager(new TaskManager());
+            List<Movie> movies = movieManager.GetMoviesFomImdb(failedMoviesIds);
+
+            sw.Restart();
+            dbProcessor.DeleteMoviesFromDatabase(failedMoviesIds);
             dbProcessor.SaveMoviesToDatabase(movies);
             sw.Stop();
             Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");

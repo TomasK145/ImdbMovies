@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ImdbMoviesConsoleApp
@@ -26,6 +27,15 @@ namespace ImdbMoviesConsoleApp
             return movies;
         }
 
+        public List<Movie> GetListOfMovies(List<int> failedMoviesIds)
+        {
+            List<Movie> movies = new List<Movie>();
+            List<Task<List<Movie>>> movieTasks = DefineTasks(TaskCount, failedMoviesIds);
+            WaitAllTasksInTasksList(movieTasks);
+            GetResultsFromTasks(movieTasks, movies);
+            return movies;
+        }
+
         private List<Task<List<Movie>>> DefineTasks(int countOfTask, int imdbIdForProcessing, int batchSize)
         {
             List<Task<List<Movie>>> movieTasks = new List<Task<List<Movie>>>();
@@ -39,9 +49,26 @@ namespace ImdbMoviesConsoleApp
             return movieTasks;
         }
 
+        private List<Task<List<Movie>>> DefineTasks(int countOfTask, List<int> failedMoviesIds)
+        {
+            List<Task<List<Movie>>> movieTasks = new List<Task<List<Movie>>>();
+            int batchSize = failedMoviesIds.Count / countOfTask;
+            for (int i = 0; i < countOfTask; i++)
+            {
+                movieTasks.Add(DefineTask(failedMoviesIds.Skip(i * batchSize).Take(batchSize).ToList()));
+            }
+            return movieTasks;
+        }
+
         private Task<List<Movie>> DefineTask(int imdbIdForTask, int batchSize)
         {
             Task<List<Movie>> task = Task<List<Movie>>.Run(() => MovieGetter.GetMovies(imdbIdForTask, batchSize));
+            return task;
+        }
+
+        private Task<List<Movie>> DefineTask(List<int> failedMoviesIds)
+        {
+            Task<List<Movie>> task = Task<List<Movie>>.Run(() => MovieGetter.GetMovies(failedMoviesIds));
             return task;
         }
 

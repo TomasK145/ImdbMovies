@@ -95,5 +95,22 @@ namespace ImdbMoviesConsoleApp
 
             return movieIdList;
         }
+
+        public void DeleteMoviesFromDatabase(List<int> moviesIdsForDeletion)
+        {
+            string deleteQuery = "DELETE FROM IMDB_MOVIE WHERE IMDB_ID_NUM IN (" + String.Join(",", moviesIdsForDeletion) + ");";
+
+            using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
+            {
+                try
+                {
+                    connection.Execute(deleteQuery);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.WriteLog($"DeleteMoviesFromDatabase - Ex: {ex}");
+                }
+            }
+        }
     }
 }

@@ -16,5 +16,11 @@ namespace ImdbMoviesConsoleApp
             List<Movie> movies = MovieObtainer.GetListOfMovies(imdbIdForProcessing, batchSize);
             return movies;
         }
+
+        public List<Movie> GetMoviesFomImdb(List<int> failedMoviesIds)
+        {
+            List<Movie> movies = MovieObtainer.GetListOfMovies(failedMoviesIds);
+            return movies;
+        }
     }
 }
