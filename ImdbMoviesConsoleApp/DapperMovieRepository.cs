@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Dapper;
 
 namespace ImdbMoviesConsoleApp
@@ -98,19 +99,28 @@ namespace ImdbMoviesConsoleApp
 
         public void DeleteMoviesFromDatabase(List<int> moviesIdsForDeletion)
         {
-            string deleteQuery = "DELETE FROM IMDB_MOVIE WHERE IMDB_ID_NUM IN (" + String.Join(",", moviesIdsForDeletion) + ");";
+            int batchDeleteCount = 200;
+            int batchSize = moviesIdsForDeletion.Count / batchDeleteCount;
+            string moviesIdsString = String.Empty;
+            //string deleteQuery = "DELETE FROM IMDB_MOVIE WHERE IMDB_ID_NUM IN (@MOVIES_IDS);";
 
-            using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
+            for (int i = 0; i < batchDeleteCount; i++)
             {
-                try
+                using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
                 {
-                    connection.Execute(deleteQuery);
+                    try
+                    {
+                        string deleteQuery = "DELETE FROM IMDB_MOVIE WHERE IMDB_ID_NUM IN (" + String.Join(",", moviesIdsForDeletion.Skip(i * batchSize).Take(batchSize).ToList()) + ");";
+                        //moviesIdsString = String.Join(",", moviesIdsForDeletion.Skip(i * batchSize).Take(batchSize).ToList());
+
+                        connection.Execute(deleteQuery.Replace("'",""));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.WriteLog($"DeleteMoviesFromDatabase - Ex: {ex}");
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Logger.Instance.WriteLog($"DeleteMoviesFromDatabase - Ex: {ex}");
-                }
-            }
+            }            
         }
     }
 }

@@ -33,7 +33,7 @@ namespace ImdbMoviesConsoleApp
             List<Task<List<Movie>>> movieTasks = DefineTasks(TaskCount, failedMoviesIds);
             WaitAllTasksInTasksList(movieTasks);
             GetResultsFromTasks(movieTasks, movies);
-            return movies;
+        return movies;
         }
 
         private List<Task<List<Movie>>> DefineTasks(int countOfTask, int imdbIdForProcessing, int batchSize)
