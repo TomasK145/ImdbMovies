@@ -42,7 +42,7 @@ namespace ImdbMoviesConsoleApp
                 Console.WriteLine("Prebieha...");
                 int taskCount = Int32.Parse(ConfigReader.GetConfigValue("taskCount"));
                 int batchSize = Int32.Parse(ConfigReader.GetConfigValue("batchSize"));
-                int selectCount = taskCount * batchSize;
+                int selectCount = 5000; // taskCount * batchSize;
 
                 List<int> failedMoviesIds = dbProcessor.GetFailedMovieIds(selectCount);
                 GetFailedMoviesFromImdbToDatabase(failedMoviesIds);
