@@ -9,5 +9,7 @@ namespace ImdbMoviesConsoleApp
         int GetMovieIdForNextProcessing();
         List<Movie> ReadMoviesFromDatabase();
         List<int> GetFailedMovieIds(int selectTopCount);
+
+        List<int> GetNotExistingMovieIds(int selectTopCount, int skipCount);
     }
 }

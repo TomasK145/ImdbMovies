@@ -15,7 +15,7 @@ namespace ImdbMoviesConsoleApp
         static void Main(string[] args)
         {
             Stopwatch stopwatch = new Stopwatch();
-            Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru, 3 - opatovny pokus o ziskanie filmov s exception");
+            Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru, 3 - opatovny pokus o ziskanie filmov s exception, 4 - ziskaj chybajuce filmy");
             string selectedOption = Console.ReadLine();
             Container = DependencyConfiguration.InitializeContainer();
             dbProcessor = Container.Resolve<IMovieRepository>();
@@ -46,6 +46,16 @@ namespace ImdbMoviesConsoleApp
 
                 List<int> failedMoviesIds = dbProcessor.GetFailedMovieIds(selectCount);
                 GetFailedMoviesFromImdbToDatabase(failedMoviesIds);
+            }
+            else if (selectedOption.Equals("4"))
+            {
+                Console.WriteLine("Prebieha...");
+                //posledne spracovane: takeCount:  // skipCount:
+                int takeCount = 1000;
+                int skipCount = 1;
+
+                List<int> failedMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
+                //TODO: spracovanie
             }
             else
             {

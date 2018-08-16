@@ -143,5 +143,10 @@ namespace ImdbMoviesConsoleApp
         {
             
         }
+
+        public List<int> GetNotExistingMovieIds(int selectTopCount, int skipCount)
+        {
+            return new List<int>();
+        }
     }
 }

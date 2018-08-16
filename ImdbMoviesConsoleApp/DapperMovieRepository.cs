@@ -97,6 +97,32 @@ namespace ImdbMoviesConsoleApp
             return movieIdList;
         }
 
+        public List<int> GetNotExistingMovieIds(int selectTopCount, int skipCount)
+        {
+            List<int> movieIdList = new List<int>();
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@takeCount", selectTopCount.ToString());
+            parameters.Add("@skipCount", skipCount.ToString());
+
+            string selectMissingMoviesQuery = $"select IMDB_ID_NUM from IMDB_MISSING_MOVIES";
+            using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
+            {
+                try
+                {
+                    connection.Execute("GetMissingMoviesIds", parameters, commandType: CommandType.StoredProcedure);
+                    movieIdList = connection.Query<int>(selectMissingMoviesQuery).AsList();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.WriteLog($"Select missing movies' ids - Ex: {ex}");
+                }
+
+            }
+
+            return movieIdList;
+        }
+
         public void DeleteMoviesFromDatabase(List<int> moviesIdsForDeletion)
         {
             int batchDeleteCount = 200;
