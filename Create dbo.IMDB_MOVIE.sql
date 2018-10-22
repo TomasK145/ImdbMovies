@@ -1,7 +1,7 @@
 ﻿USE [ImdbMoviesDb]
 GO
 select INFO_MESSAGE, count(*) from [dbo].[IMDB_MOVIE] group by INFO_MESSAGE
---1286503 --> 1299145
+----> 1524995 --> 1528223 --> 1536445 --> 1536950
 
 select max(IMDB_ID_NUM) from [dbo].[IMDB_MOVIE] --4468348
 
@@ -27,3 +27,24 @@ begin
 end 
 
 select * from #missingIds
+---------------------------------------------------------------
+declare @counter int, @maxId int
+set @counter = 1
+select @maxId = max(IMDB_ID_NUM) from [dbo].[IMDB_MOVIE]  --5468306
+--select @counter = max(IMDB_ID_NUM) from [dbo].IMDB_MISSING_MOVIES 
+
+while(@counter < @maxId)
+begin 
+	insert into dbo.IMDB_MISSING_MOVIES (IMDB_ID_NUM, IS_MISSING) values (@counter, null)
+	set @counter = @counter + 1;
+end
+
+select max(IMDB_ID_NUM), count(*) from [dbo].IMDB_MISSING_MOVIES 
+---------------------------------------------------------------
+update mm
+set mm.IS_MISSING = 1
+from dbo.IMDB_MISSING_MOVIES as mm
+left join [dbo].[IMDB_MOVIE] as im on mm.IMDB_ID_NUM = im.IMDB_ID_NUM
+where im.IMDB_ID_NUM is null
+---------------------------------------------------------------
+select top (1000) IMDB_ID_NUM from IMDB_MISSING_MOVIES where IS_MISSING = 1 and IMDB_ID_NUM >= 1

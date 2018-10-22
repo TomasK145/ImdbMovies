@@ -102,15 +102,15 @@ namespace ImdbMoviesConsoleApp
             List<int> movieIdList = new List<int>();
 
             var parameters = new DynamicParameters();
-            parameters.Add("@takeCount", selectTopCount.ToString());
-            parameters.Add("@skipCount", skipCount.ToString());
+            parameters.Add("@takeCount", selectTopCount.ToString(), DbType.Int32);
+            parameters.Add("@skipCount", skipCount.ToString(), DbType.Int32);
 
-            string selectMissingMoviesQuery = $"select IMDB_ID_NUM from IMDB_MISSING_MOVIES";
+            string selectMissingMoviesQuery = $"select top (1000) IMDB_ID_NUM from IMDB_MISSING_MOVIES where IMDB_ID_NUM >= 1";
             using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
             {
                 try
                 {
-                    connection.Execute("GetMissingMoviesIds", parameters, commandType: CommandType.StoredProcedure);
+                    //connection.Execute("GetMissingMoviesIds", parameters, commandType: CommandType.StoredProcedure);
                     movieIdList = connection.Query<int>(selectMissingMoviesQuery).AsList();
                 }
                 catch (Exception ex)

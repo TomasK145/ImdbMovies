@@ -55,6 +55,7 @@ namespace ImdbMoviesConsoleApp
                 int skipCount = 1;
 
                 List<int> failedMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
+                GetFailedMoviesFromImdbToDatabase(failedMoviesIds);
                 //TODO: spracovanie
             }
             else
