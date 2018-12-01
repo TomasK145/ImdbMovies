@@ -15,7 +15,7 @@ namespace ImdbMoviesConsoleApp
         static void Main(string[] args)
         {
             Stopwatch stopwatch = new Stopwatch();
-            Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru, 3 - opatovny pokus o ziskanie filmov s exception, 4 - ziskaj chybajuce filmy");
+            Console.WriteLine("Zadaj: 1 - ulozi filmy z IMDB do databazy, 2 - exportuje filmy z databazy do CSV suboru, 3 - opatovny pokus o ziskanie filmov s exception, 4 - ziskaj chybajuce filmy, 5 - ziskaj podla ID");
             string selectedOption = Console.ReadLine();
             Container = DependencyConfiguration.InitializeContainer();
             dbProcessor = Container.Resolve<IMovieRepository>();
@@ -51,11 +51,24 @@ namespace ImdbMoviesConsoleApp
             {
                 Console.WriteLine("Prebieha...");
                 //posledne spracovane: takeCount:  // skipCount:
-                int takeCount = 1000;
-                int skipCount = 1;
+                int takeCount = 100000;
+                int skipCount = 0;
 
                 List<int> failedMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
                 GetFailedMoviesFromImdbToDatabase(failedMoviesIds);
+                //TODO: spracovanie
+            }
+            else if (selectedOption.Equals("5"))
+            {
+                Console.WriteLine("Prebieha...");
+                int takeCount = 100000;
+                int skipCount = 0;
+
+                List<int> missingMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
+
+
+                List<int> movieIdList = missingMoviesIds;
+                GetMoviesByIds(movieIdList);
                 //TODO: spracovanie
             }
             else
@@ -100,6 +113,21 @@ namespace ImdbMoviesConsoleApp
 
             sw.Restart();
             dbProcessor.DeleteMoviesFromDatabase(failedMoviesIds);
+            dbProcessor.SaveMoviesToDatabase(movies);
+            sw.Stop();
+            Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");
+        }
+
+        private static void GetMoviesByIds(List<int> movieIdList)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            MovieManager movieManager = new MovieManager(new TaskManager());
+            List<Movie> movies = movieManager.GetMoviesFromImdbFromIdList(movieIdList);
+
+            sw.Restart();
+            dbProcessor.DeleteMoviesFromDatabase(movieIdList);
             dbProcessor.SaveMoviesToDatabase(movies);
             sw.Stop();
             Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");
