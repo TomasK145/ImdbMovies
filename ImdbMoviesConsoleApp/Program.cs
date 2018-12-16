@@ -61,7 +61,7 @@ namespace ImdbMoviesConsoleApp
             else if (selectedOption.Equals("5"))
             {
                 Console.WriteLine("Prebieha...");
-                int takeCount = 100000;
+                int takeCount = 10000;
                 int skipCount = 0;
 
                 List<int> missingMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
@@ -126,8 +126,10 @@ namespace ImdbMoviesConsoleApp
             MovieManager movieManager = new MovieManager(new TaskManager());
             List<Movie> movies = movieManager.GetMoviesFromImdbFromIdList(movieIdList);
 
+            List<int> movieIdListToDelete = movies.Select(m => Convert.ToInt32(m.imdbID.Replace("tt", ""))).ToList();
+
             sw.Restart();
-            dbProcessor.DeleteMoviesFromDatabase(movieIdList);
+            dbProcessor.DeleteMoviesFromDatabase(movieIdListToDelete);
             dbProcessor.SaveMoviesToDatabase(movies);
             sw.Stop();
             Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");

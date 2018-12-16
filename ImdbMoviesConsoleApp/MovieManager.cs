@@ -48,7 +48,10 @@ namespace ImdbMoviesConsoleApp
                     Logger.Instance.WriteLog($"imdbIdNBumericPart: {imdbIdNBumericPart} - Exception: {ex.ToString()}");
                     movie = new Movie(imdbIdNBumericPart, ex.ToString());
                 }
-                movies.Add(movie);
+                if (movie != null)
+                {
+                    movies.Add(movie);
+                }                
             }
 
             return movies;
