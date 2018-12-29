@@ -1,7 +1,7 @@
 ﻿USE [ImdbMoviesDb]
 GO
 select INFO_MESSAGE, count(*) from [dbo].[IMDB_MOVIE] with (nolock) group by INFO_MESSAGE
-----> 1538523 --> 1538535 --> 1538456 --> 1540500 --> 1540536 --> 1540555 --> 1540616
+--> 1540616
 
 
 select max(IMDB_ID_NUM) from [dbo].[IMDB_MOVIE] --4468348

@@ -52,7 +52,7 @@ namespace ImdbMoviesConsoleApp
                 Console.WriteLine("Prebieha...");
                 //posledne spracovane: takeCount:  // skipCount:
                 int takeCount = 100000;
-                int skipCount = 100000; //zvysok o tie kt boli checknute
+                int skipCount = 200000; //zvysok o tie kt boli checknute
 
                 List<int> failedMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
                 GetFailedMoviesFromImdbToDatabase(failedMoviesIds);
@@ -62,13 +62,14 @@ namespace ImdbMoviesConsoleApp
             {
                 Console.WriteLine("Prebieha...");
                 int takeCount = 100000;
-                int skipCount = 0;
+                int skipCount = 200000;
 
                 List<int> missingMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
 
 
-                List<int> movieIdList = missingMoviesIds;
-                GetMoviesByIds(movieIdList);
+                //List<int> movieIdList = missingMoviesIds;
+                //GetMoviesByIds(movieIdList);
+                GetFailedMoviesFromImdbToDatabase(missingMoviesIds);
                 //TODO: spracovanie
             }
             else
@@ -112,7 +113,8 @@ namespace ImdbMoviesConsoleApp
             List<Movie> movies = movieManager.GetMoviesFomImdb(failedMoviesIds);
 
             sw.Restart();
-            dbProcessor.DeleteMoviesFromDatabase(failedMoviesIds);
+            List<int> movieIdForDeletion = movies.Select(m => Convert.ToInt32(m.imdbID.Replace("tt", ""))).ToList();
+            dbProcessor.DeleteMoviesFromDatabase(movieIdForDeletion);
             dbProcessor.SaveMoviesToDatabase(movies);
             sw.Stop();
             Logger.Instance.WriteLog($"Save movies to DB - duration: {sw.ElapsedMilliseconds} ms");
