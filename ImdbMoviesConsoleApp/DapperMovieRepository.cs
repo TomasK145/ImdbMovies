@@ -126,7 +126,7 @@ namespace ImdbMoviesConsoleApp
         public void DeleteMoviesFromDatabase(List<int> moviesIdsForDeletion)
         {
             int batchDeleteCount = 200;
-            int batchCount = (moviesIdsForDeletion.Count / batchDeleteCount);
+            int batchCount = Convert.ToInt32(Math.Ceiling((double)moviesIdsForDeletion.Count /  (double)batchDeleteCount));
 
             string moviesIdsString = String.Empty;
             //string deleteQuery = "DELETE FROM IMDB_MOVIE WHERE IMDB_ID_NUM IN (@MOVIES_IDS);";
@@ -137,7 +137,7 @@ namespace ImdbMoviesConsoleApp
                 {
                     try
                     {
-                        string deleteQuery = "DELETE FROM IMDB_MOVIE WHERE IMDB_ID_NUM IN (" + String.Join(",", moviesIdsForDeletion.Skip(i * batchCount).Take(batchCount).ToList()) + ");";
+                        string deleteQuery = "DELETE FROM IMDB_MOVIE WHERE IMDB_ID_NUM IN (" + String.Join(",", moviesIdsForDeletion.Skip(i * batchDeleteCount).Take(batchDeleteCount).ToList()) + ");";
                         //moviesIdsString = String.Join(",", moviesIdsForDeletion.Skip(i * batchSize).Take(batchSize).ToList());
 
                         connection.Execute(deleteQuery.Replace("'",""));
