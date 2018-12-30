@@ -105,7 +105,7 @@ namespace ImdbMoviesConsoleApp
             parameters.Add("@takeCount", selectTopCount.ToString(), DbType.Int32);
             parameters.Add("@skipCount", skipCount.ToString(), DbType.Int32);
 
-            string selectMissingMoviesQuery = $"select top (@takeCount) IMDB_ID_NUM from IMDB_MISSING_MOVIES where IS_MISSING = 1 and  IMDB_ID_NUM >= @skipCount";
+            string selectMissingMoviesQuery = $"select top (@takeCount) IMDB_ID_NUM from IMDB_MISSING_MOVIES where IS_MISSING = 1 and  IMDB_ID_NUM >= @skipCount order by IMDB_ID_NUM asc";
             using (IDbConnection connection = new SqlConnection(ImdbDbConnectionString))
             {
                 try
