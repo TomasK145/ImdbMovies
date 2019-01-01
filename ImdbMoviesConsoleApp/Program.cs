@@ -52,7 +52,7 @@ namespace ImdbMoviesConsoleApp
                 Console.WriteLine("Prebieha...");
                 //posledne spracovane: takeCount:  // skipCount:
                 int takeCount = 100000;
-                int skipCount = 400000; //zvysok o tie kt boli checknute
+                int skipCount = 700000; //zvysok o tie kt boli checknute
 
                 List<int> failedMoviesIds = dbProcessor.GetNotExistingMovieIds(takeCount, skipCount);
                 GetFailedMoviesFromImdbToDatabase(failedMoviesIds);
