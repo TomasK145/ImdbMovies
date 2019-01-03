@@ -1,7 +1,7 @@
 ﻿USE [ImdbMoviesDb]
 GO
 select INFO_MESSAGE, count(*) from [dbo].[IMDB_MOVIE] with (nolock) group by INFO_MESSAGE
---> 1540616 --> 1582618 --> 1582643
+--> 1540616 --> 1582618 --> 1582643 --> 1582705 --> 1582726
 
 select min(mm.IMDB_ID_NUM), max(mm.IMDB_ID_NUM)
 from [dbo].[IMDB_MISSING_MOVIES] as mm
