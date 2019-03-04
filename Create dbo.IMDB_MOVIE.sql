@@ -1,7 +1,7 @@
 ﻿USE [ImdbMoviesDb]
 GO
 select INFO_MESSAGE, count(*) from [dbo].[IMDB_MOVIE] with (nolock) group by INFO_MESSAGE
---> 1540616 --> 1596723 --> 1601611 --> 1607194 --> 1695468
+--> 1540616 --> 1596723 --> 1601611 --> 1607194 --> 1697362
 --> 3,9m
  
 select min(mm.IMDB_ID_NUM), max(mm.IMDB_ID_NUM)
@@ -14,6 +14,8 @@ select max(IMDB_ID_NUM) from [dbo].[IMDB_MOVIE] --9449682
 
 
 select IMDB_ID_NUM from [dbo].[IMDB_MOVIE] order by IMDB_ID_NUM asc
+
+--delete from  dbo.IMDB_MISSING_MOVIES
 ---------------------------------------------------------------
 
 declare @repeaterCount int, @counter int
